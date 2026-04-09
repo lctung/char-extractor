@@ -31,21 +31,11 @@ unseen_char_simple_cnt = len(unseen_char_simple)
 unseen_char_medium_cnt = len(unseen_char_medium)
 unseen_char_stronge_cnt = len(unseen_char_stronge)
 
-# print(clean_text)
-# print("----------------------------")
-# print(unique_characters)
-# print("----------------------------")
 print("big5: ", len(set_big5_file))
 print("notosans ", len(notosans_file))
 print("moe: ", len(moe_file))
-# print("手寫字數: ", write_char_cnt)
+
 print("字形數量: ", unique_char_cnt)
 print("MOE4808 - 手寫過的 字數共有: ", unseen_char_simple_cnt)
 print("big5 - MOE4808 - 手寫過的 字數共有: ", unseen_char_medium_cnt)
 print("notosans - big5 - MOE4808 - 手寫過的 字數共有: ", unseen_char_stronge_cnt)
-# print(clean_text)
-
-# output = r"D:\NTUT\AI\notosanschar_newline.txt"
-# with open(output, "w", encoding="utf-8") as file:
-#     for char in clean_text:
-#         file.write(char)
