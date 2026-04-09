@@ -5,17 +5,16 @@ Big5_ranges = {
 }
 
 def generate_big5_extracted_text():
-    count = 0
-    text_content = ""
+    all_chars = []
+    
     for category, (start, end) in Big5_ranges.items():
-                
-        chars_in_category = []
         # 分解出高位元組與低位元組
         start_high, start_low = start >> 8, start & 0xFF
         end_high, end_low = end >> 8, end & 0xFF
         
         for h in range(start_high, end_high + 1):
-            for l in range(0x40, 0xFF): # Big5 低位元組範圍是 0x40-0x7E, 0xA1-0xFE
+            # Big5 低位元組範圍是 0x40-0x7E, 0xA1-0xFE
+            for l in range(0x40, 0xFF): 
                 # 檢查是否在指定區間內
                 if (h == start_high and l < start_low) or (h == end_high and l > end_low):
                     continue
@@ -23,23 +22,23 @@ def generate_big5_extracted_text():
                 # 排除非 Big5 定義的低位元組區間 (0x7F-0xA0 是空的)
                 if 0x40 <= l <= 0x7E or 0xA1 <= l <= 0xFE:
                     try:
-                        # 將數值轉成 Bytes 再解碼為 Unicode 字串
+                        # 將數值轉成 Bytes 再解碼為 Unicode 字串 (cp950 為 Windows 的 Big5 實作)
                         big5_bytes = bytes([h, l])
                         char = big5_bytes.decode('cp950')
-                        chars_in_category.append(char)
-                        count += 1
+                        all_chars.append(char)
                     except UnicodeDecodeError:
-                        continue # 遇到未定義的空位就跳過
-        
-        text_content += "".join(chars_in_category)
-    return text_content, count
+                        continue
+    
+    text_content = "".join(all_chars)
+    
+    return text_content, len(all_chars)
 
-def save_to_file(filename="big5.txt", ):
+def save_to_file(filename="big5.txt"):
     text, count = generate_big5_extracted_text()
     with open(filename, "w", encoding="utf-8") as file:
         file.write(text)
     print(f"成功將 Big5 內容提取並轉換為 Unicode 寫入 {filename}")
-    print(f"共有 {count} 個字")
+    print(f"共有 {count} 個字元")
 
 if __name__ == "__main__":
     save_to_file()
