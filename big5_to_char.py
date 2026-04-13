@@ -1,44 +1,44 @@
-Big5_ranges = {
-    "Graphical characters": (0xA140, 0xA3BF),
-    "Frequently used characters": (0xA440, 0xC67E),
-    "Less frequently used characters": (0xC940, 0xF9D5)
-}
+import re
 
-def generate_big5_extracted_text():
-    all_chars = []
+def extract_big5_characters(file_path):
+    big5_list = []
     
-    for category, (start, end) in Big5_ranges.items():
-        # 分解出高位元組與低位元組
-        start_high, start_low = start >> 8, start & 0xFF
-        end_high, end_low = end >> 8, end & 0xFF
-        
-        for h in range(start_high, end_high + 1):
-            # Big5 低位元組範圍是 0x40-0x7E, 0xA1-0xFE
-            for l in range(0x40, 0xFF): 
-                # 檢查是否在指定區間內
-                if (h == start_high and l < start_low) or (h == end_high and l > end_low):
-                    continue
+    with open(file_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            # 跳過註解行或空行
+            if line.startswith('#') or not line.strip():
+                continue
+            
+            # 使用 split 分割欄位 (通常是 Tab 或空格分隔)
+            parts = line.split()
+            
+            # 判斷是否為有效的條目：
+            # 1. 至少有兩欄
+            # 2. 第二欄必須是 Unicode (0x 開頭)，排除 "DBCS LEAD BYTE"
+            if len(parts) >= 2 and parts[1].startswith('0x'):
+                big5_hex = parts[0]
+                unicode_hex = parts[1]
                 
-                # 排除非 Big5 定義的低位元組區間 (0x7F-0xA0 是空的)
-                if 0x40 <= l <= 0x7E or 0xA1 <= l <= 0xFE:
-                    try:
-                        # 將數值轉成 Bytes 再解碼為 Unicode 字串 (cp950 為 Windows 的 Big5 實作)
-                        big5_bytes = bytes([h, l])
-                        char = big5_bytes.decode('cp950')
-                        all_chars.append(char)
-                    except UnicodeDecodeError:
-                        continue
-    
-    text_content = "".join(all_chars)
-    
-    return text_content, len(all_chars)
+                # 將十六進位字串轉為實際的中文字元
+                try:
+                    # 邏輯：將 0x4E00 轉為整數再轉為 Unicode 字元
+                    char = chr(int(unicode_hex, 16))
+                    big5_list.append(char)
+                except ValueError:
+                    continue
+                    
+    return big5_list
 
-def save_to_file(filename="big5.txt"):
-    text, count = generate_big5_extracted_text()
-    with open(filename, "w", encoding="utf-8") as file:
-        file.write(text)
-    print(f"成功將 Big5 內容提取並轉換為 Unicode 寫入 {filename}")
-    print(f"共有 {count} 個字元")
+# 執行提取
+file_name = 'medium_baseline.txt'  # 請確認檔案路徑正確
+all_chars = extract_big5_characters(file_name)
+output_filename = 'extracted_big5.txt'
+# 顯示前 10 個抓到的字
+for item in all_chars[:10]:
+    print(f"字元: {item}")
 
-if __name__ == "__main__":
-    save_to_file()
+print(f"\n總共抓取到 {len(all_chars)} 個字元")
+
+with open(output_filename, 'w', encoding='utf-8') as f:
+    for i in range(len(all_chars)):
+        f.write(all_chars[i] + '\n')

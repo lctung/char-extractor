@@ -1,41 +1,35 @@
-manuscript_content_file = r"D:/NTUT/AI/text/write.txt" # please paste absolute path
-moe_file = r"D:/NTUT/AI/text/MOE4808.txt"
-notosans_file = r"D:/NTUT/AI/text/notosanschar.txt"
-big5_file = r"D:\NTUT\AI\Font-Project\Extract_Font\big5.txt"
+handwriting_file = r"C:\CTL\AI\fontdiffuser-finetune\0_written_newline.txt" # please paste absolute path
+moe_file_path = r"C:\CTL\AI\fontdiffuser-finetune\1_MOE4808_newline.txt"
+big5_file_path = r"C:\CTL\AI\fontdiffuser-finetune\2_big5_newline.txt"
+notosans_file_path = r"C:\CTL\AI\fontdiffuser-finetune\3_notosanschar_newline.txt"
 
-with open(manuscript_content_file, "r", encoding="utf-8") as file:
+with open(handwriting_file, "r", encoding="utf-8") as file:
     text = file.read()
-with open(moe_file, "r", encoding="utf-8") as file:
-    moe_file = file.read()
-with open(notosans_file, "r", encoding="utf-8") as file:
-    notosans_file = file.read()
-with open(big5_file, "r", encoding="utf-8") as file:
-    big5_file = file.read()
+with open(moe_file_path, "r", encoding="utf-8") as file:
+    moe_content = "".join(file.read().split())
+with open(big5_file_path, "r", encoding="utf-8") as file:
+    big5_content = "".join(file.read().split())
+with open(notosans_file_path, "r", encoding="utf-8") as file:
+    notosans_content = "".join(file.read().split())
 
-clean_text = "".join(text.lstrip('\ufeff').split()) # delete all elements which is not char
+clean_text = "".join(text.lstrip('\ufeff')  .split()) # delete all elements which is not char
 write_char_cnt = len(clean_text)
-
-set_moe_file = set(moe_file)
-set_notosans_file = set(notosans_file)
-set_big5_file = set(big5_file)
-
 unique_characters = set(clean_text)
+
+set_moe_file = set(moe_content)
+set_big5_file = set(big5_content)
+set_notosans_file = set(notosans_content)
 
 unseen_char_simple = set_moe_file - unique_characters
 unseen_char_medium = set_big5_file - set_moe_file - unique_characters
 unseen_char_stronge = set_notosans_file - set_big5_file - set_moe_file - unique_characters
 
 
-unique_char_cnt = len(unique_characters)
-unseen_char_simple_cnt = len(unseen_char_simple)
-unseen_char_medium_cnt = len(unseen_char_medium)
-unseen_char_stronge_cnt = len(unseen_char_stronge)
-
+print("moe: ", len(set_moe_file))
 print("big5: ", len(set_big5_file))
-print("notosans ", len(notosans_file))
-print("moe: ", len(moe_file))
+print("notosans ", len(set_notosans_file))
 
-print("字形數量: ", unique_char_cnt)
-print("MOE4808 - 手寫過的 字數共有: ", unseen_char_simple_cnt)
-print("big5 - MOE4808 - 手寫過的 字數共有: ", unseen_char_medium_cnt)
-print("notosans - big5 - MOE4808 - 手寫過的 字數共有: ", unseen_char_stronge_cnt)
+print("手寫字形數量: ", len(unique_characters))
+print("MOE4808 - 手寫過的 字數共有: ", len(unseen_char_simple))
+print("big5 - MOE4808 - 手寫過的 字數共有: ", len(unseen_char_medium))
+print("notosans - big5 - MOE4808 - 手寫過的 字數共有: ", len(unseen_char_stronge))
