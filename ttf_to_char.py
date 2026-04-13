@@ -20,14 +20,11 @@ def extract_unicode_from_ttf(ttf_path):
 if __name__ == "__main__":
     ttf_file = "NotoSansTC-ExtraLight.ttf"  # 這裡換成你的 TTF 檔案路徑
     unicode_chars = extract_unicode_from_ttf(ttf_file)
-    
-    if unicode_chars:
-        # 將串列合併為單一字串
-        all_chars_str = "".join(unicode_chars)
         
-        # 直接寫入檔案
-        output_filename = "U2.txt"
-        with open(output_filename, 'w', encoding='utf-8') as f:
-            f.write(all_chars_str)
-            
-        print(f"成功提取了 {len(unicode_chars)} 個不重複的字元，並已儲存至 {output_filename}")
+    # 直接寫入檔案
+    output_filename = "3_notosanschar_newline.txt"
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        for i in range(len(unicode_chars)):
+            f.write(unicode_chars[i] + '\n')
+        
+    print(f"成功提取了 {len(unicode_chars)} 個不重複的字元，並已儲存至 {output_filename}")
