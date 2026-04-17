@@ -19,12 +19,12 @@ def extract_unicode_from_ttf(ttf_path):
 
 if __name__ == "__main__":
     ttf_file = "NotoSansTC-ExtraLight.ttf"  # 這裡換成你的 TTF 檔案路徑
+    output_file = "3_notosanschar_newline.txt"
+
     unicode_chars = extract_unicode_from_ttf(ttf_file)
-        
-    # 直接寫入檔案
-    output_filename = "3_notosanschar_newline.txt"
-    with open(output_filename, 'w', encoding='utf-8') as f:
+    
+    with open(output_file, 'w', encoding='utf-8') as f:
         for i in range(len(unicode_chars)):
             f.write(unicode_chars[i] + '\n')
         
-    print(f"成功提取了 {len(unicode_chars)} 個不重複的字元，並已儲存至 {output_filename}")
+    print(f"成功提取了 {len(unicode_chars)} 個不重複的字元，並已儲存至 {output_file}")

@@ -24,9 +24,10 @@ def extract_big5_characters(file_path):
                     
     return big5_list
 
-input_filename = 'big5_range.txt'  # 請確認檔案路徑正確
-all_chars = extract_big5_characters(input_filename)
-output_filename = '2_big5_newline.txt'
+input_file = 'big5_range.txt'  # 請確認檔案路徑正確
+output_file = '2_big5_newline.txt'
+
+all_chars = extract_big5_characters(input_file)
 
 # 顯示前 10 個抓到的字
 for item in all_chars[:10]:
@@ -34,6 +35,6 @@ for item in all_chars[:10]:
 
 print(f"\n總共抓取到 {len(all_chars)} 個字元")
 
-with open(output_filename, 'w', encoding='utf-8') as f:
+with open(output_file, 'w', encoding='utf-8') as f:
     for i in range(len(all_chars)):
         f.write(all_chars[i] + '\n')
