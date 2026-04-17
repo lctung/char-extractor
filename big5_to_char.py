@@ -24,8 +24,8 @@ def extract_big5_characters(file_path):
                     
     return big5_list
 
-file_name = 'big5_range.txt'  # 請確認檔案路徑正確
-all_chars = extract_big5_characters(file_name)
+input_filename = 'big5_range.txt'  # 請確認檔案路徑正確
+all_chars = extract_big5_characters(input_filename)
 output_filename = '2_big5_newline.txt'
 
 # 顯示前 10 個抓到的字
