@@ -1,9 +1,11 @@
-handwriting_file = r"C:\CTL\AI\fontdiffuser-finetune\0_written_newline.txt" # please paste absolute path
+# please paste absolute path
+# manuscript_path = r'C:\CTL\AI\font_extract\char-extractor\manuscript.txt'
+handwriting_path = r"C:\CTL\AI\fontdiffuser-finetune\0_written_newline.txt" 
 moe_file_path = r"C:\CTL\AI\fontdiffuser-finetune\1_MOE4808_newline.txt"
 big5_file_path = r"C:\CTL\AI\fontdiffuser-finetune\2_big5_newline.txt"
 notosans_file_path = r"C:\CTL\AI\fontdiffuser-finetune\3_notosanschar_newline.txt"
 
-with open(handwriting_file, "r", encoding="utf-8") as file:
+with open(handwriting_path, "r", encoding="utf-8") as file:
     text = file.read()
 with open(moe_file_path, "r", encoding="utf-8") as file:
     moe_content = "".join(file.read().split())
@@ -13,7 +15,6 @@ with open(notosans_file_path, "r", encoding="utf-8") as file:
     notosans_content = "".join(file.read().split())
 
 clean_text = "".join(text.lstrip('\ufeff')  .split()) # delete all elements which is not char
-write_char_cnt = len(clean_text)
 unique_characters = set(clean_text)
 
 set_moe_file = set(moe_content)
